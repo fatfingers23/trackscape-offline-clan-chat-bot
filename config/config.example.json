@@ -3,6 +3,7 @@
     "client": {
         "id": "<DISCORD_BOT_ID>",
         "token": "<DISCORD_BOT_TOKEN>",
+        "devServerId": "<Server Discord Id>",
         "intents": [
             "Guilds",
             "GuildMessages",

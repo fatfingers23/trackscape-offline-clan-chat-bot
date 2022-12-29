@@ -57,9 +57,18 @@ export class CommandRegistrationService {
                         )
                     );
                     for (let localCmd of localCmdsOnly) {
-                        await this.rest.post(Routes.applicationCommands(Config.client.id), {
-                            body: localCmd,
-                        });
+
+                        if(Config.client.devServerId){
+                            console.log('Just commands for the dev server');
+                            await this.rest.post(Routes.applicationGuildCommands(Config.client.id, Config.client.devServerId), {
+                                body: localCmd,
+                            });
+                        }else {
+                            console.log('Loads all servers');
+                            await this.rest.post(Routes.applicationCommands(Config.client.id), {
+                                body: localCmd,
+                            });
+                        }
                     }
                     Logger.info(Logs.info.commandActionCreated);
                 }
