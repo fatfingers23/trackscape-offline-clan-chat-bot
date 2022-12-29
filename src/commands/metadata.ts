@@ -41,6 +41,19 @@ export const ChatCommandMetadata: {
             },
         ],
     },
+    SETCLAN: {
+        type: ApplicationCommandType.ChatInput,
+        name: 'set-clan-name',
+        description: 'Allows you to set your clan name for this bot to send those chats to the server.',
+        dm_permission: true,
+        default_member_permissions: undefined,
+        options: [
+            {
+                ...Args.SET_CLAN_NAME,
+                required: true,
+            },
+        ],
+    },
     TEST: {
         type: ApplicationCommandType.ChatInput,
         name: Lang.getRef('chatCommands.test', Language.Default),

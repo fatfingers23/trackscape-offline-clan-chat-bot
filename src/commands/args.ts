@@ -53,4 +53,10 @@ export class Args {
             },
         ],
     };
+
+    public static readonly SET_CLAN_NAME: APIApplicationCommandBasicOption = {
+        name: 'clan-name',
+        description: 'Your clan name',
+        type: ApplicationCommandOptionType.String,
+    };
 }
