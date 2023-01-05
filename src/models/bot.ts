@@ -24,7 +24,7 @@ import {
     MessageHandler,
     ReactionHandler,
 } from '../events/index.js';
-import { JobService, Logger } from '../services/index.js';
+import {ApiStore, JobService, Logger, PusherService} from '../services/index.js';
 import { PartialUtils } from '../utils/index.js';
 
 const require = createRequire(import.meta.url);
@@ -44,7 +44,9 @@ export class Bot {
         private commandHandler: CommandHandler,
         private buttonHandler: ButtonHandler,
         private reactionHandler: ReactionHandler,
-        private jobService: JobService
+        private jobService: JobService,
+        private pusherService: PusherService,
+        private webClient: ApiStore
     ) {}
 
     public async start(): Promise<void> {
@@ -87,7 +89,9 @@ export class Bot {
         if (!Debug.dummyMode.enabled) {
             this.jobService.start();
         }
-
+        this.pusherService.startListeners();
+        let result = await this.webClient.getAllClans()
+        Logger.info(result[0].name)
         this.ready = true;
         Logger.info(Logs.info.clientReady);
     }

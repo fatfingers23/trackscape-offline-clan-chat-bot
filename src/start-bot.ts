@@ -26,12 +26,14 @@ import { Job } from './jobs/index.js';
 import { Bot } from './models/bot.js';
 import { Reaction } from './reactions/index.js';
 import {
+    ApiStore,
     CommandRegistrationService,
     EventDataService,
     JobService,
     Logger,
+    PusherService
 } from './services/index.js';
-import { Trigger } from './triggers/index.js';
+import { NewMessageTrigger, Trigger } from './triggers/index.js';
 
 const require = createRequire(import.meta.url);
 let Config = require('../config/config.json');
@@ -79,9 +81,10 @@ async function start(): Promise<void> {
         // TODO: Add new reactions here
     ];
 
+    const webClient = new ApiStore()
     // Triggers
     let triggers: Trigger[] = [
-        // TODO: Add new triggers here
+        new NewMessageTrigger(webClient),
     ];
 
     // Event handlers
@@ -108,7 +111,9 @@ async function start(): Promise<void> {
         commandHandler,
         buttonHandler,
         reactionHandler,
-        new JobService(jobs)
+        new JobService(jobs),
+        new PusherService(client),
+        webClient
     );
 
     // Register

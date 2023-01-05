@@ -24,19 +24,20 @@ export class TriggerHandler {
         }
 
         // Find triggers caused by this message
-        let triggers = this.triggers.filter(trigger => {
+
+        let triggers: Array<Trigger> = [];
+        for (let trigger of this.triggers) {
             if (trigger.requireGuild && !msg.guild) {
-                return false;
+                continue;
             }
 
-            if (!trigger.triggered(msg)) {
-                return false;
+            let runTrigger = !await trigger.triggered(msg)
+            if (runTrigger) {
+                continue;
             }
+            triggers.push(trigger);
+        }
 
-            return true;
-        });
-
-        // If this message causes no triggers then return
         if (triggers.length === 0) {
             return;
         }
@@ -53,4 +54,13 @@ export class TriggerHandler {
             await trigger.execute(msg, data);
         }
     }
+
+    private async asyncMap<T, U>(array: T[], callback: (element: T) => Promise<U>): Promise<U[]> {
+        const results: U[] = [];
+        for (const element of array) {
+            results.push(await callback(element));
+        }
+        return results;
+    }
+
 }
